@@ -1,0 +1,24 @@
+{
+  "name": "turkeygeolocationrestapi",
+  "version": "1.0.0",
+  "description": "Türkiye için il ilçe semt veritabanı. Bölgesel bilgiler",
+  "private": true,
+  "scripts": {
+    "start": "node ./app.js"
+  },
+  "keywords": [
+    "il ilçe",
+    "il",
+    "ilçe",
+    "rest",
+    "api"
+  ],
+  "author": "Ramazan Demircioğlu - ram.demircioglu@gmail.com",
+  "license": "MIT",
+  "dependencies": {
+    "debug": "~4.3.4",
+    "express": "~4.18.1",
+    "morgan": "~1.10.0",
+    "mysql2": "^2.3.3"
+  }
+}

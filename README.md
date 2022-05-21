@@ -4,6 +4,13 @@ Bu API [Melih Korkmaz](https://github.com/melihkorkmaz/il-ilce-mahalle-geolocati
 
 Bu API Türkiye'de yer alan il, ilçe ve mahalle bilgilerini içerir. İl ve ilçe bazında geolocation (enlem-boylam, poligon ve boundingbox) bilgileri de yer almaktadır. Mongodb yedek dosyalarını [buradan](https://drive.google.com/file/d/1e6v4S_-BK8Zs43HYBH5ftidBDrHlOZY7/view?usp=sharing) indirebilirsiniz.
 
+## Versiyon 1.1.0 Yenilikler
+
+* Bu versiyonda veri tabanındaki id'ler integer data tipine dönüştürülmüştür. Şehirlerde **id** olarak plaka no kullanılmıştır.
+* Hız artışı amacıyla, Tablolardan gelen Lookup **name** bilgileri aynı tablolara gömülmüştür.  
+* Neighborhoods tablosu iptal edilmiştir. Bilgilere disctricts tablosu üzerinden ulaşılmaktadır. 
+* Veri tabanı başka bir siteye taşınmış ve kullanıcının veritabanına yazma işlemleri mysql üzerinden engellenmiştir.
+* **Bu versiyonun** Mysql yedek dosyalarını [buradan](https://drive.google.com/file/d/1PMMDwv1pZJksOsLLDuaGBF_5BNLe9t27/view?usp=sharing) indirebilirsiniz.
 
 ## İçindekiler
 * [Servis Kullanımı](#service)
@@ -16,7 +23,6 @@ Bu API Türkiye'de yer alan il, ilçe ve mahalle bilgilerini içerir. İl ve il�
     * [İl (City)](#dataModelCity)
     * [İlçe (Town)](#dataModelTown)
     * [Semt (District)](#dataModelDistrict)
-    * [Mahalle (Neighborhood)](#dataModelNeighborhood)
 
 ## Polygon Nedir
 Polygon bir ilin ya da ilçenin sınırlarının enlem ve boylam bilgisini içeren bir grup veridir. Bu bilgi ile bir noktanın o bölge içinde olup olmadığını bilebilir ya da Google Map API ile harita üzerinde gösterebilirsiniz.
@@ -34,9 +40,9 @@ Kısıtlamalar: Alınan genel sonuçlarda maksimum 100 data servis edilir. Bu sa
 Sıralama City > Towns > Districts > Neighborhoods şeklindedir.  
 Sıralama İl > İlçe > Semt > Mahalle şeklindedir.
 
-Servis adresi : https://il-ilce-rest-api.herokuapp.com/v1
+Servis adresi : https://turkey-geolocation-rest-api.vercel.app/
 
-**Örnek : https://il-ilce-rest-api.herokuapp.com/v1/cities**  
+**Örnek : https://turkey-geolocation-rest-api.vercel.app/cities**  
 
 <a name="search"></a>
 ## Koordinat Arama (/search/coordinates)
@@ -47,7 +53,7 @@ alabilirsiniz.
 ```
 [
     {
-        "_id":"ce941560c5a7ba9ff5cd24f5f9d75065",
+        "_id":131,
         "name":"Bandırma",
         "city" : "Balıkesir"
     },
@@ -64,8 +70,8 @@ SQL sorgusu ile izmir ilinin _id bilgisini ve enlem boylam bilgilerini görebili
 ```
 [
     {
-        "_id":"41585da49f8b3330c12e64b11b0195b4",
-        "name":"İzmir",
+        "_id":35,
+        "city":"İzmir",
         "lat":38.23166,
         "lon":27.02997
     }
@@ -79,21 +85,21 @@ Toplam 81 il bilgisini json array olarak listeler. Default alanlar sadece _id ve
 ```
 [
     {
-        "_id":"ce941560c5a7ba9ff5cd24f5f9d75065",
-        "name":"İstanbul"
+        "_id":"34",
+        "city":"İstanbul"
     },
     ...
 ]
 ```
 
-### /cities?fields=name,lat,lon
+### /cities?fields=city,lat,lon
 Sonuçlar içerisinde gelocationda yer alan enlem boylam bilgisini gösterir. 
 
 ```
 [
     {
-        "_id":"ce941560c5a7ba9ff5cd24f5f9d75065"
-        "name":"İstanbul",
+        "_id":34
+        "city":"İstanbul",
         "geolocation":{
             "lat":"41.0766019",
             "lon":"29.052495"
@@ -103,17 +109,17 @@ Sonuçlar içerisinde gelocationda yer alan enlem boylam bilgisini gösterir.
 ]
 ```
 
-### /cities?fields=name,towns
+### /cities?fields=city,towns
 İl isimleri ile birlikte o ile ait ilçelerin isim ve id bilgisini listeler.
 
 ```
 [
     {
-        "_id":"ce941560c5a7ba9ff5cd24f5f9d75065",
-        "name":"İstanbul",
+        "_id":34,
+        "city":"İstanbul",
         "towns":[
-            {"_id":"fc74d991616e5931e47ef849ae54e8c2","name":"Adalar"},
-            {"_id":"66cd91880b422fa267b41e1777d5d271","name":"Arnavutköy"},
+            {"_id":421,"name":"Adalar"},
+            {"_id":422,"name":"Arnavutköy"},
             ...
         ]
     },
@@ -133,22 +139,22 @@ ID'si verilmiş şehir bilgisini döner.
 
 ```
 {
-    "_id":"ce941560c5a7ba9ff5cd24f5f9d75065",
-    "name":"İstanbul"
+    "_id":35,
+    "name":"İzmir"
 }
 ```
 
-### /cities/:id?fields=name,towns
+### /cities/:id?fields=city,towns
 ID'si verilmiş şehrin isim ve ilçe bilgilerini listeler.
 ```
 {
-    "_id":"ce941560c5a7ba9ff5cd24f5f9d75065",
-    "name":"İstanbul",
+    "_id":34,
+    "city":"İstanbul",
     "towns":[
-        {"_id":"fc74d991616e5931e47ef849ae54e8c2","name":"Adalar"},
-        {"_id":"66cd91880b422fa267b41e1777d5d271","name":"Arnavutköy"},
-        {"_id":"b17dd334e97c22173275812f47d4a8c2","name":"Ataşehir"},
-        {"_id":"4b0fa2e031d02d08a559fbff728b456d","name":"Avcılar"},
+        {"_id":421,"name":"Adalar"},
+        {"_id":422,"name":"Arnavutköy"},
+        {"_id":423,"name":"Ataşehir"},
+        {"_id":424,"name":"Avcılar"},
         ...
     ]
 }
@@ -163,21 +169,21 @@ Tüm ilçeleri json array olarak listeler(max=100). Default alanlar sadece _id, 
 ```
 [
     {
-        "_id":"bccdf16204b5a81620ed39c8c69930ea",
-        "name":"Kadıköy",
-        "city" : "İstanbul"
+        "_id":63,
+        "town":"Çamlıdere",
+        "city" : "Ankara"
     },
     ...
 ]
 ```
 
-### /towns?fields=name,lat,lon
+### /towns?fields=town,lat,lon
 Sonuçlar içerisinde gelocationda yer alan enlem boylam bilgisini gösterir.
 
 ```
 [
     {
-        "_id":"bccdf16204b5a81620ed39c8c69930ea"
+        "_id":443
         "name":"Kadıköy",
         "geolocation":{
             "lat":"41.0766019",
@@ -188,18 +194,18 @@ Sonuçlar içerisinde gelocationda yer alan enlem boylam bilgisini gösterir.
 ]
 ```
 
-### /towns?fields=name,districts
+### /towns?fields=_id,town,districts
 İlçe isimleri ile birlikte o ilçeye ait semtlerin isim ve id bilgisini listeler.
 
 ```
 [
     {
-        "_id":"bccdf16204b5a81620ed39c8c69930ea",
+        "_id":443,
         "name":"Kadıköy",
         "districts":[
-            {"_id":"19136811a8b89351660117988aaab257","name":"Bostancı"},
-            {"_id":"d7d8dfc31ec4fe72d6383a0393df7235","name":"Caddebostan"},
-            {"_id":"1ce31e4e97cb908b3655f893661e4f1b","name":"Caferağa"}
+            {"_id":1757,"name":"Bostancı"},
+            {"_id":1758,"name":"Caddebostan"},
+            {"_id":1759,"name":"Caferağa"}
             ...
         ]
     },
@@ -218,7 +224,7 @@ ID'si verilmiş ilçe bilgisini döner.
 
 ```
 {
-    "_id":"bccdf16204b5a81620ed39c8c69930ea",
+    "_id":443,
     "name":"Kadıköy",
     "city": "İstanbul"
 }
@@ -228,12 +234,12 @@ ID'si verilmiş ilçe bilgisini döner.
 ID'si verilmiş ilçenin isim ve semt bilgilerini listeler.
 ```
 {
-    "_id":"bccdf16204b5a81620ed39c8c69930ea",
+    "_id":443,
     "name":"Kadıköy",
     "districts":[
-        {"_id":"19136811a8b89351660117988aaab257","name":"Bostancı"},
-        {"_id":"d7d8dfc31ec4fe72d6383a0393df7235","name":"Caddebostan"},
-        {"_id":"1ce31e4e97cb908b3655f893661e4f1b","name":"Caferağa"}
+        {"_id":1757,"name":"Bostancı"},
+        {"_id":1758,"name":"Caddebostan"},
+        {"_id":1759,"name":"Caferağa"}
         ...
     ]
 }
@@ -243,13 +249,13 @@ ID'si verilmiş ilçenin isim ve semt bilgilerini listeler.
 -----
 <a name="districts"></a>
 ## Semtler (/districts)
-Tüm semtleri json array olarak listeler(max=100). Default alanlar sadece _id, isim, ilçe ve il bilgisidir.
+Tüm semtleri json array olarak listeler(max=100). Default alanlar sadece _id, district, ilçe ve il bilgisidir.
 
 ```
 [
     {
-        "_id":"dbd0266fcc4d225809c6c6669aa2046a",
-        "name":"Feneryolu",
+        "_id":1763,
+        "district":"Feneryolu",
         "town" : "Kadıköy",
         "city" : "İstanbul"
     },
@@ -257,20 +263,20 @@ Tüm semtleri json array olarak listeler(max=100). Default alanlar sadece _id, i
 ]
 ```
 
-### /districts?fields=name
-Sonuçlar içerisinde sadece _id ve name bilgisi yer alır
+### /districts?fields=_id,district
+Sonuçlar içerisinde sadece _id ve district bilgisi yer alır
 
-### /districts?fields=name,neighborhoods
+### /districts?fields=_id,district,neighborhoods
 Semt isimleri ile birlikte o semte ait mahalle isim ve id bilgisini listeler.
 
 ```
 [
     {
-        "_id":"dbd0266fcc4d225809c6c6669aa2046a",
-        "name":"Feneryolu",
+        "_id":1763,
+        "district":"Feneryolu",
         "neighborhoods":[
-            {"_id":"799df51fbdb9624b9274b01bd072d749","name":"Feneryolu mah"},
-            {"_id":"b588445717478e1a47892e70b44325ac","name":"Zühtüpaşa mah"},
+            {"_id":53504,"name":"Feneryolu mah"},
+            {"_id":53505,"name":"Zühtüpaşa mah"},
             ...
         ]
     },
@@ -289,24 +295,25 @@ ID'si verilmiş semt bilgisini döner.
 
 ```
 {
-    "_id":"dbd0266fcc4d225809c6c6669aa2046a",
-    "name":"Feneryolu",
+    "_id":1763,
+    "district":"Feneryolu",
     "town":"Kadıköy",
     "city":"İstanbul"
 }
 ```
 
-### /districts/:id?fields=name,neighborhoods
-ID'si verilmiş semtin isim ve mahalle bilgilerini listeler.
+### /districts/:id?fields=district,neighborhoods,zip_code
+ID'si verilmiş semtin isim ve mahalle bilgilerini listeler ve semtin posta kodunu görüntüler.
 ```
 {
-    "_id":"dbd0266fcc4d225809c6c6669aa2046a",
-    "name":"Feneryolu",
+    "_id":1763,
+    "district":"Feneryolu",
     "neighborhoods":[
-        {"_id":"799df51fbdb9624b9274b01bd072d749","name":"Feneryolu mah"},
-        {"_id":"b588445717478e1a47892e70b44325ac","name":"Zühtüpaşa mah"},
+        {"_id":53504,"name":"Feneryolu mah"},
+        {"_id":53505,"name":"Zühtüpaşa mah"},
         ...
-    ]
+    ],
+    "zip_code":34724
 }
 ```
 
@@ -319,7 +326,7 @@ Tüm mahalleleri json array olarak listeler(max=100). Default alanlar _id, isim,
 ```
 [
     {
-        "_id":"799df51fbdb9624b9274b01bd072d749",
+        "_id":53504,
         "name":"Feneryolu mah",
         "district":"Feneryolu",
         "town":"Kadıköy",
@@ -330,8 +337,8 @@ Tüm mahalleleri json array olarak listeler(max=100). Default alanlar _id, isim,
 ]
 ```
 
-### /neighborhoods?fields=name
-Sonuçlar içerisinde sadece name bilgisi yer alır
+### /neighborhoods?fields=neighborhoods
+Sonuçlar içerisinde sadece id ve name bilgisi yer alır
 
 ### /neighborhoods?limit=10
 Sadece ilk sırada yer alan 10 mahalleyi listeler.
@@ -344,7 +351,7 @@ ID'si verilmiş mahalle bilgisini döner.
 
 ```
 {
-    "_id":"799df51fbdb9624b9274b01bd072d749",
+    "_id":53504,
     "name":"Feneryolu mah",
     "district":"Feneryolu",
     "town":"Kadıköy",
@@ -363,7 +370,7 @@ ID'si verilmiş mahalle bilgisini döner.
 | Alan | Tip | Açıklama |
 | ------ | ------ | ------ |
 | _id | string | Şehir id|
-| name | string | Şehir ismi |
+| city | string | Şehir ismi |
 | towns | array | İlçe id listesi |
 | lat | double | Şehir Enlem bilgisi |
 | lon | double | Şehir Boylam bilgisi |
@@ -376,13 +383,14 @@ ID'si verilmiş mahalle bilgisini döner.
 | Alan | Tip | Açıklama |
 | ------ | ------ | ------ |
 | _id | string | İlçe id|
+| town | string | İlçe ismi |
 | city | string | Şehir ismi |
 | districts | array | Semt id listesi |
 | boundingbox | array | İlçeyi sınırlayan çerçeve |
 | lat | double | İlçe Enlem bilgisi |
 | lon | double | İlçe Boylam bilgisi |
 | Polygons | geometri | İlçe sınırları bilgisi |
-| name | string | İlçe ismi |
+| boundingbox | array | İlçeyi sınırlayan çerçeve |
 
 
 <a name="dataModelDistrict"></a>
@@ -390,21 +398,10 @@ ID'si verilmiş mahalle bilgisini döner.
 | Alan | Tip | Açıklama |
 | ------ | ------ | ------ |
 | _id | string | Semt id|
-| city | string | Şehir ismi |
-| name | string | Semt ismi |
-| neighborhoods | array | Mahalle id listesi |
-| town | string | İlçe ismi |
-
-
-<a name="dataModelNeighborhood"></a>
-### Mahalle (Neighborhood)
-| Alan | Tip | Açıklama |
-| ------ | ------ | ------ |
-| _id | string | Mahalle id|
-| city | string | Şehir ismi |
 | district | string | Semt ismi |
-| name | string | Mahalle ismi |
+| city | string | Şehir ismi |
 | town | string | İlçe ismi |
+| neighborhoods | array | Mahalle id listesi |
 | zip_code | mediumint | Posta Kodu |
 
 

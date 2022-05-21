@@ -1,6 +1,6 @@
 {
-  "name": "turkeygeolocationrestapi",
-  "version": "1.0.0",
+  "name": "turkeygeolocationgrestapi",
+  "version": "1.1.0",
   "description": "Türkiye için il ilçe semt veritabanı. Bölgesel bilgiler",
   "private": true,
   "scripts": {

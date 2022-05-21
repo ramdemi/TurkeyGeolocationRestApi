@@ -1,13 +1,14 @@
 const express = require('express');
 const db = require('../services/db');
+const config = require('../config')
 
 const router = express.Router();
 
 async  function findLocation(source, lat, lon) {
  	let sql, sqlpre;
-	 sqlpre = "SELECT _id, name "
+	 sqlpre = "SELECT _id, town "
 	 sqlpre += (source == "towns")? ", city":"";
-	 sql =  `${sqlpre} FROM fhckf4OCq3.${source} WHERE ST_WITHIN(Point(${lon},${lat}),${source}.polygons);`;
+	 sql =  `${sqlpre} FROM ${config.db.database}.${source} WHERE ST_WITHIN(Point(${lon},${lat}),${source}.polygons);`;
 	 const rows =  await db.query(sql);
 	 return rows
 };

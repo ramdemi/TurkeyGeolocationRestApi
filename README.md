@@ -64,7 +64,7 @@ alabilirsiniz.
 ## Rawsql (/?rawsql=)
 Veri tabanı üzerinde sql komutlarıyla dilediğiniz gibi okuma yapabilirsiniz. (insert, update, ve bunun gibi veritabanına yazma komutları yasaklanmıştır. Bu tip sorgular çalışmaz)
 
-### /?rawsql=select _id, name, lat, lon from cities where name='İzmir'
+### /?rawsql=select _id, city, lat, lon from cities where city='İzmir'
 SQL sorgusu ile izmir ilinin _id bilgisini ve enlem boylam bilgilerini görebilirsiniz.
 
 ```

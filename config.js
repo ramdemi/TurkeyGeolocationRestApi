@@ -3,9 +3,9 @@ const env = process.env;
 const config = {
   eskdb: { /* do not put password or any sensitive info here, done only for demo */
     host: env.DB_HOST || 'remotemysql.com',
-    user: env.DB_USER || 'fhckf4OCq3',
+    user: env.DB_USER || 'silindi',
     password: env.DB_PASSWORD || 'WGPjcasxfP',
-    database: env.DB_NAME || 'fhckf4OCq3',
+    database: env.DB_NAME || 'yokki',
     waitForConnections: true,
     connectionLimit: env.DB_CONN_LIMIT || 2,
     queueLimit: 0,
